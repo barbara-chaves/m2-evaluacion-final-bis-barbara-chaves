@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+    
+    <head>
+        <meta charset="UTF-8" />
+        <title>Juego de Parejas</title>
+        <link rel="icon" href="favicon.png" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+    </head>
+    
+    <body>
+        <div class="page">
+            <header class="header">
+                 <h1 class="header-title">El juego de las parejas</h1>
+
+            </header>
+            <main class="main">
+                <section class="select">
+                    <form class="form" action="#">
+                        <input type="radio" name="cards-number" id="four" value="4" checked />
+                        <label for="four">4</label>
+                        <input type="radio" name="cards-number" id="six" value="6" />
+                        <label for="six">6</label>
+                        <input type="radio" name="cards-number" id="eigth" value="8"
+                        />
+                        <label for="eigth">8</label>
+                        <input type="button" value="Comenzar" id="start-btn" />
+                    </form>
+                </section>
+                <section class="cards">
+                    <ul class="cards__list"></ul>
+                </section>
+            </main>
+        </div>
+        <script src="./assets/js/main.js"></script>
+    </body>
+
+</html>
