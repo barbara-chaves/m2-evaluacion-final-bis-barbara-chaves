@@ -23,8 +23,6 @@ const createCard = (card) => {
   const frontCardImage = document.createElement('img');
   frontCardImage.classList.add('card__img');
   frontCardImage.src = card.image;
-  const newCard = document.createElement('li');
-  newCard.classList.add('card');
   frontCard.appendChild(frontCardImage);
 	
 	const backCard = document.createElement('div');
@@ -33,6 +31,9 @@ const createCard = (card) => {
 	backCardImage.src = '../assets/images/logo-adalab-80px.png';
 	backCard.appendChild(backCardImage);
 	
+  const newCard = document.createElement('li');
+	newCard.classList.add('card');
+	newCard.dataset.pair = card.pair;
   newCard.appendChild(frontCard);
   newCard.appendChild(backCard);
 	cardsContainer.appendChild(newCard);
@@ -52,6 +53,8 @@ const turnCard = (event) => {
 
 const handleCardClick = (event) => {
 	turnCard(event);
+	changeDafaFace(event);
+	compareCards(event);
 };
 
 const addEventOnCards = () => {
@@ -85,3 +88,37 @@ const startGame = () => {
 
 startBtn.addEventListener('click', startGame);
 
+/// Implementation
+
+let turnedCards = [];
+const compareCards = () => {
+	turnedCards = [];
+	for (let i = 0; i < cards.length; i++){
+		if (cards[i].dataset.face === 'front'){
+			turnedCards.push(cards[i]);
+			if (turnedCards.length === 2){
+				console.log(turnedCards);
+					if(turnedCards[0].dataset.pair === turnedCards[1].dataset.pair){
+						console.log('match card');
+						for (const card of turnedCards){
+							card.classList.add('match-pair');
+							card.dataset.face = 'blocked';
+							card.removeEventListener('click', handleCardClick);
+						}
+					} else {
+						console.log('dont mach');
+					}
+				turnedCards = [];
+			}
+		}
+	}
+};
+
+const changeDafaFace = (event) => {
+	if (event.currentTarget.dataset.face === 'front'){
+		event.currentTarget.dataset.face = 'back';
+		console.log("I'm face back");
+	} else {
+		event.currentTarget.dataset.face = 'front';
+	}
+};
