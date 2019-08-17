@@ -1,15 +1,15 @@
 /* eslint-disable indent */
-"use strict";
+'use strict';
 
-const radioBtns = document.querySelectorAll("input[name=cards-number]");
-const startBtn = document.querySelector("#start-btn");
-const cardsContainer = document.querySelector(".cards__list");
+const radioBtns = document.querySelectorAll('input[name=cards-number]');
+const startBtn = document.querySelector('#start-btn');
+const cardsContainer = document.querySelector('.cards__list');
 let cards = [];
-let gameSize = localStorage.getItem("game-size");
+let gameSize = localStorage.getItem('game-size');
 let saveData = [];
 
 const getGameSizeFromLocal = () => {
-  gameSize = localStorage.getItem("game-size");
+  gameSize = localStorage.getItem('game-size');
   for (const radio of radioBtns) {
     if (radio.value === gameSize) {
       radio.checked = true;
@@ -22,29 +22,32 @@ const getGameSizeFromInput = () => {
   for (const radio of radioBtns) {
     if (radio.checked) {
       gameSize = parseInt(radio.value);
-      localStorage.setItem("game-size", gameSize);
+      localStorage.setItem('game-size', gameSize);
     }
   }
   return gameSize;
 };
 
+let imageList = [];
+
 const createCard = card => {
-  const frontCard = document.createElement("div");
-  frontCard.classList.add("hidden");
-  const frontCardImage = document.createElement("img");
-  frontCardImage.classList.add("card__img");
+  const frontCard = document.createElement('div');
+  frontCard.classList.add('hidden');
+  const frontCardImage = document.createElement('img');
+  frontCardImage.classList.add('card__img');
   frontCardImage.src = card.image;
+  imageList.push(frontCardImage);
   frontCard.appendChild(frontCardImage);
 
-  const backCard = document.createElement("div");
-  backCard.classList.add("back-card", "hidden");
-  const backCardImage = document.createElement("img");
+  const backCard = document.createElement('div');
+  backCard.classList.add('back-card', 'hidden');
+  const backCardImage = document.createElement('img');
   backCardImage.src =
-    "https://via.placeholder.com/160x195/30d9c4/ffffff/?text=ADALAB";
+    'https://via.placeholder.com/160x195/30d9c4/ffffff/?text=ADALAB';
   backCard.appendChild(backCardImage);
 
-  const newCard = document.createElement("li");
-  newCard.classList.add("card");
+  const newCard = document.createElement('li');
+  newCard.classList.add('card');
   newCard.dataset.pair = card.pair;
   newCard.appendChild(frontCard);
   newCard.appendChild(backCard);
@@ -78,14 +81,14 @@ const printCards = () => {
 };
 
 const turnCard = event => {
-  event.currentTarget.firstElementChild.classList.toggle("front-card");
-  event.currentTarget.lastElementChild.classList.toggle("back-card");
+  event.currentTarget.firstElementChild.classList.toggle('front-card');
+  event.currentTarget.lastElementChild.classList.toggle('back-card');
 };
 
 const addEventOnCards = () => {
-  cards = document.querySelectorAll(".card");
+  cards = document.querySelectorAll('.card');
   for (const card of cards) {
-    card.addEventListener("click", handleCardClick);
+    card.addEventListener('click', handleCardClick);
   }
 };
 
@@ -111,9 +114,10 @@ const generateCards = () => {
   getDataFromServer();
 };
 
-const cleanCardsContainer = () => (cardsContainer.innerHTML = "");
+const cleanCardsContainer = () => (cardsContainer.innerHTML = '');
 
 const startGame = () => {
+  cleanCardsContainer();
   if (gameSize) {
     getGameSizeFromLocal();
   } else {
@@ -130,14 +134,14 @@ const handleStartBtnClick = () => {
 
 startGame();
 
-startBtn.addEventListener("click", handleStartBtnClick);
+startBtn.addEventListener('click', handleStartBtnClick);
 
 /// Implementation
 
 const turnDontMatchingCards = card => {
-  card.firstElementChild.classList.toggle("front-card");
-  card.lastElementChild.classList.toggle("back-card");
-  card.dataset.face = "back";
+  card.firstElementChild.classList.toggle('front-card');
+  card.lastElementChild.classList.toggle('back-card');
+  card.dataset.face = 'back';
   for (const card of cards){
     card.addEventListener('click', handleCardClick);
   }
@@ -148,7 +152,7 @@ let flippedCards = [];
 const compareCards = () => {
   flippedCards = [];
     for (let i = 0; i < cards.length; i++) {
-      if (cards[i].dataset.face === "front") {
+      if (cards[i].dataset.face === 'front') {
         flippedCards.push(cards[i]);
         if (flippedCards.length === 2) {
           for (const card of cards){
@@ -156,9 +160,9 @@ const compareCards = () => {
           }
           if (flippedCards[0].dataset.pair === flippedCards[1].dataset.pair) {
             for (const card of flippedCards) {
-              card.classList.add("match-pair");
-              card.dataset.face = "blocked";
-              card.removeEventListener("click", handleCardClick);
+              card.classList.add('match-pair');
+              card.dataset.face = 'blocked';
+              card.removeEventListener('click', handleCardClick);
               for (const card of cards){
                 card.addEventListener('click', handleCardClick);
               }
@@ -176,21 +180,43 @@ const compareCards = () => {
 
 
 const changeDafaFace = event => {
-  if (event.currentTarget.dataset.face === "front") {
-    event.currentTarget.dataset.face = "back";
+  if (event.currentTarget.dataset.face === 'front') {
+    event.currentTarget.dataset.face = 'back';
   } else {
-    event.currentTarget.dataset.face = "front";
+    event.currentTarget.dataset.face = 'front';
   }
 };
 
 // winner
+
+const main = document.querySelector('.main');
+
+
+const pokemonRain = () => {
+  const newImageConatiner = document.createElement('div');
+  newImageConatiner.classList.add('pokemon');
+  for (const image of imageList){
+    newImageConatiner.appendChild(image);
+  }
+  main.appendChild(newImageConatiner);
+};
+
+const removePokemons = () => {
+  const winnerPokemonImages = document.querySelector('.pokemon');
+  main.removeChild(winnerPokemonImages);
+  imageList = [];
+  return imageList;
+};
+
 const getWinner = () => {
   let points = 0;
   for (const card of cards) {
-    if (card.dataset.face === "blocked") {
+    if (card.dataset.face === 'blocked') {
       points++;
       if (points === cards.length) {
-        alert("Enhorabuena");
+        setTimeout(pokemonRain, 500);
+        setTimeout(removePokemons, 3000);
+        setTimeout(startGame, 3000);
       }
     }
   }

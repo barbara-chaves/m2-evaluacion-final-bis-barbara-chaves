@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 30px;
     color: white;
-    font: bold 2.5rem "Courier New", Courier, monospace;
+    font: bold 2.5rem $mainFont;
   }
 }
 
@@ -24,7 +24,7 @@ body {
     text-align: center;
     input,
     label {
-      font: 1rem "Courier New", Courier, monospace;
+      font: 1rem $mainFont;
     }
     input[type="button"] {
       margin-left: 10px;
@@ -82,4 +82,26 @@ body {
     background-color: $colorLigthGray;
     opacity: 0.5;
   }
+}
+
+@keyframes rain {
+  from {
+    top: 0px;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.pokemon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  position: absolute;
+  top: 0;
+  animation-name: rain;
+  animation-duration: 2.5s;
+  animation-iteration-count: 1;
 }
